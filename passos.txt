@@ -1,0 +1,5 @@
+criar venv: python -m venv consumption-env
+ativar env: consumption-env\Scripts\activate.bat
+criar lista de dependencias: pip freeze > requirements.txt
+instalar lista de dependencias: pip install -r requirements.txt
+sair do env: deactivate
