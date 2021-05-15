@@ -1,5 +1,5 @@
 from django.views.generic import TemplateView, ListView
-from .models import TbDistribuicaoEspacialBacias,TbChuvaprevistaEcmwf,TbDeparaEcmwfEns,Tbbase,TbProdutibilidade
+from .models import TbDistribuicaoEspacialBacias,TbChuvaprevistaEcmwf,TbDeparaEcmwfEns,Tbbase,TbProdutibilidade,TbEnaRegra
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.core.serializers import serialize
@@ -87,6 +87,25 @@ class ProdutibilidadeView(TemplateView):
         context['columns'] = df.columns
         return context
 
+class RegraView(TemplateView):
+    template_name = 'pages/ena_regras.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super(RegraView, self).get_context_data(**kwargs)
+        table_regra = config['tabelas']['ENAREGRA']['table_name']
+        
+        df = pd.read_sql_query("select codposto , mes , formula as Vazao from "+table_regra,connection)
+        #result_mapa = df.set_index(['bacia','cenario']).rename_axis(['vlr'], axis=1).stack().unstack(['cenario']).reset_index()
+        #result_mapa = result_mapa.drop(['vlr'], axis=1)
+        print(df)
+        json_obj = df.reset_index().to_json(orient ='records')#.rename({result_mapa.columns[0]:"0",result_mapa.columns[1]:"1",result_mapa.columns[2]:"2"},axis=1).reset_index().to_json(orient ='records')
+        #print(json_obj)
+        resultado = []
+        resultado = json.loads(json_obj)
+        print(resultado)
+        context['regra'] = resultado
+        context['columns'] = df.columns
+        return context
 
 @csrf_exempt
 def sendTable(request, *args, **kwargs):
@@ -117,10 +136,30 @@ def sendTableProdutibilidade(request, *args, **kwargs):
     df_produtibilidade = distrib_esp_tab
     df_produtibilidade["dtreferencia"] = dtreferencia
     df_produtibilidade.index += 1 
-    print(df_produtibilidade)
+    TbProdutibilidade.objects.all().delete()
     df_produtibilidade.to_sql(TbProdutibilidade._meta.db_table, con=engine, if_exists = 'replace')
 
     return JsonResponse({'Tbbase':'OK'})
+
+@csrf_exempt
+def sendTableRegra(request, *args, **kwargs):
+    tabela = request.POST.get('table')
+    dtreferencia = request.POST.get('dtreferencia')
+    
+    df = pd.read_html(tabela)
+    
+    #distrib_esp_tab = pd.melt(df[0],id_vars=["Bacia"], var_name="cenario", value_name="vlrdistribuicao")
+    distrib_esp_tab = df[0].rename({df[0].columns[0]:"codposto",df[0].columns[1]:"mes",df[0].columns[2]:"formula"},axis=1)
+    df_regra = distrib_esp_tab
+    df_regra["dtreferencia"] = dtreferencia
+    df_regra.index += 1 
+    print(df_regra)
+    TbEnaRegra.objects.all().delete()
+    df_regra.to_sql(TbEnaRegra._meta.db_table, con=engine, if_exists = 'append')
+
+    return JsonResponse({'Tbbase':'OK'})
+
+
 def tablesJoin(request):
     mapa = request.GET.get('mapa')
     datainicial = request.GET.get('datainicial')

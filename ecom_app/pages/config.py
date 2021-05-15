@@ -6,6 +6,9 @@ config = {
         'PRODUTIBILIDADE' : {
             'table_name': 'tb_ena_produtibilidade'
         },
+        'ENAREGRA' : {
+            'table_name': 'tb_ena_regra'
+        },
         'MLT' : {
             'table_name': 'tb_cargahistorica_ecom'
         },

@@ -1,0 +1,146 @@
+<!--<table class="table table-bordered">-->
+{% extends 'pages/model.html' %}
+{% block principal %}
+<div class="container">
+  <form id="distrib_espacial_form" method='POST'>
+    <div class="row justify-content-center  text-white" style="background-color: #284662;">
+      <h4>Produtibilidade</h4>
+    </div>
+    <div class="row">
+    <div class="col">
+      
+    </div>
+    
+    <div class="col">
+    </div>
+    <div class="col">
+      <div class="form-group">
+        <label for="exampleFormControlInput2">Data Referencia</label>
+        <input class="form-control form-control-sm" type="date" id="dtreferencia" value="{ date }">
+      </div>
+      </div>
+    </div>
+    <div class="row justify-content-center ">
+      <h5>Tabela de Produtibilidade</h5>
+
+    </div>
+    <div id=tabela>
+      <table id="tabelaEspeacial" class="table table-bordered ">
+        <thead>
+          <tr>
+            {% for i in columns %}
+              <th scope="col" >{{i | title}}</th>
+            {% endfor %}
+            
+          </tr>
+        </thead>
+
+        {% for tab in distribespacial %}
+        <tr id='tableInicio'>
+          {% for key,value in tab.items %}
+            {% if key  != "index"%}
+              {% if key != 'bacia' %}
+              <td contenteditable="true"  id="input{{ forloop.counter }}item{{ tab.index }}">{{ value  }}</td>
+              {% else %}
+              <td contenteditable="true"  id="input{{ forloop.counter }}item{{ tab.index }}">{{ value  }}</td>
+              {% endif %}
+              
+            {% endif %}
+            
+          {% endfor %}
+          
+          <!--<td contenteditable="true" type="text"><input type="text" id="id1" maxlength="4" size="4" /></td>-->
+        </tr>
+        {% endfor %} 
+        {% for i in columns %}
+              <td contenteditable="true" id="input0item{{ i }}"></td>
+            {% endfor %}
+      </table>
+    </div>
+    <div class = "row justify-content-center" method="post">
+      <button type="submit" class="btn btn-primary " >Salvar</button>
+    </div>
+    <br>
+</div>
+
+{% endblock %}
+
+{% block script%}
+<script >
+function bind() {
+  console.log("iniciou")
+  var inputs = [];
+  inputs = document.querySelectorAll('*[id^="input"]');
+  console.log(inputs)
+  function paste(e) {
+    // Prevent the real paste to change the input value.
+    e.preventDefault();
+    var pastedText;
+    // Get text from paste event.
+    if(window.clipboardData && window.clipboardData.getData ) {
+      pastedText = window.clipboardData.getData('Text');
+    }  else if( e.clipboardData && e.clipboardData.getData ){
+      pastedText = e.clipboardData.getData('text/plain');
+    }
+    var table = document.getElementById('tabelaEspeacial').html;
+    //var table = $('<table />');
+    var table = $('')
+    console.log(table)
+    // Start to fill text from left to right.
+    var rows = pastedText.split("\n");
+    $('#tabelaEspeacial tbody').html('')
+    console.log('limpei')
+    for(var y in rows) {
+      console.log("Linha: "+rows[y])
+      //var cells = rows[y].split("\t");
+      //regras
+      var cells =  rows[y].split(/(\s+)/).filter( function(e) { return e.trim().length > 0; } );
+      
+      var row = $('<tr />');
+      if(cells.length==3) {
+        for(var x in cells) {
+            
+            console.log("celula: "+cells[x] + '<td contenteditable="true" id="inputfinal'+y+'item'+x+'>'+cells[x]+'</td>')
+
+            row.append('<td contenteditable="true" id="inputfinal'+y+'item'+x+'">'+cells[x]+'</td>');
+        }
+        
+        console.log("consolidado"+row)
+        table.append(row);
+        $('#tabelaEspeacial tbody').append(row)
+        
+      }
+    }
+    //$('#tabelaEspeacial tr:last').html(table);
+    //$('#tabelaEspeacial tbody').html(table)
+    bind()
+    return false;
+    }
+    
+  // Add EventListener, paste event will be a input param.
+  var i, len;
+  
+  for (i = 0, len = inputs.length; i < len; ++i) {
+    inputs[i].addEventListener("paste", paste);
+  }
+}
+// Bind
+bind();
+window.CSRF_TOKEN=''
+$('#distrib_espacial_form').on('submit',function(e){
+            e.preventDefault();
+            var tableName = $('#tabela')
+            var dtreferencia = $('#dtreferencia')
+            console.log("clicou" + $('#tabela').html())
+            $.post('sendTableRegra/',
+                {'table':tableName.html(), 'dtreferencia': dtreferencia.val()},   
+                function(response){
+                    console.log(response); //Should I have a json object in 'result' variable?
+                  }
+            );
+        }); 
+
+        
+
+  </script>
+{% endblock %}

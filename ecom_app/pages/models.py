@@ -424,3 +424,15 @@ class TbProdutibilidade(models.Model):
     class Meta:
         managed = False
         db_table = 'tb_ena_produtibilidade'
+
+class TbEnaRegra(models.Model):
+    
+    idregra = models.BigIntegerField()
+    codposto = models.BigIntegerField()
+    mes = models.BigIntegerField()
+    formula = models.CharField(max_length=300, blank=True, null=True)
+    dtreferencia =  models.DateField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'tb_ena_regra'
