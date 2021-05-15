@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'pages.apps.PagesConfig',
     'bootstrap4',
+    'django_tables2',
+    'django_pandas',
 ]
 
 MIDDLEWARE = [
@@ -71,32 +73,27 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ecom_app.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 DATABASES = {
     
+    
     'default': {
-        'ENGINE':'django.db.backends.sqlite3',
-        'NAME':os.path.join(BASE_DIR,'db.sqlite3')
-    }
-    #'default': {
-#
-    #    'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#
-    #    'NAME': 'Db_Chuvas',
-#
-    #    'USER': 'postgres',
-#
-    #    'PASSWORD': 'Leo123*',
-#
-    #    'HOST': 'localhost',
-#
-    #    'PORT': '5432'
-#
-    #}
 
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+
+        'NAME': 'Db_Chuvas',
+
+        'USER': 'postgres',
+
+        'PASSWORD': 'Leo123*',
+
+        'HOST': 'localhost',
+
+        'PORT': '5432'
+
+    }
 }
 
 

@@ -22,83 +22,24 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav">
             <li class="nav-item active">
-              <a class="nav-link" href="#">Simular cenário <span class="sr-only">(Página atual)</span></a>
+              <a class="nav-link" href="">Simular cenário <span class="sr-only">(Página atual)</span></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Cenarios Anteriores</a>
+              <a class="nav-link" href="distribespacial">Distribuição espacial das bacias</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="produtibilidade">Produtibilidade</a>
             </li>
           </ul>
         </div>
       </nav>
       <br>
+    {% block principal%}
+    {% endblock %}
         
-        <div class="container">
-          <div class="row justify-content-center  text-white" style="background-color: #284662;" >
-            <h4>GERADOR DE CENÁRIOS DE CHUVA</h4>
-          </div>
-        <div class="row justify-content-center ">
-            <h5>Informações Básicas do Cenário</h5>
-          
-        </div>
-        <div class="row">
-          <div class="col">
-            <div class="form-group">
-              <label for="exampleFormControlInput1">Nome do cenário</label>
-              <input class="form-control form-control-sm" type="text" placeholder="Nome do cenário">
-            </div>
-          </div>
-          <div class="col">
-            <label for="forrmControlInput2 ">Mapa</label>
-            <select class="form-control  form-control-sm">
-              
-              <option>BASE</option>
-              <option>FRUSTRAÇÃO</option>
-              <option>OTIMISTA</option>
-              <option>SECO</option>
-              <option>UMIDO</option>
-              <option>ECENS</option>
-              <option>EC</option>
-              <option>GEFS</option>
-              <option>REMOVIES</option>
-            </select>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col">
-            <div class="form-group">
-              <label for="exampleFormControlInput2">Data de Criação</label>
-              <input class="form-control form-control-sm" type="date" value="{ date}">
-            </div>
-          </div>
-          <div class="col">
-            <div class="form-group">
-              <label for="exampleFormControlInput3">DISTR. TEMP.</label>
-              <input class="form-control form-control-sm" type="text" placeholder="DISTR. TEMP.">
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col">
-            <div class="form-group">
-              <label for="exampleFormControlInput4">Distribuição Espacial</label>
-              <input class="form-control form-control-sm" type="text" placeholder="Distribuição Espacial">
-            </div>
-          </div>
-          <div class="col">
-            <div class="form-group">
-              <label for="exampleFormControlInput5">Descrição Adicional</label>
-              <input class="form-control form-control-sm" type="text" placeholder="Descrição Adicional">
-            </div>
-          </div>
-
-        </div>
-        <div class = "row justify-content-center">
-          <button type="submit" class="btn btn-primary ">Gerar cenario</button>
-        </div>
-        
-
-      </div>
-    
     {% bootstrap_javascript jquery='full' %}
+    {% block script%}
+    {% endblock %}
+    
 </body>
 </html>

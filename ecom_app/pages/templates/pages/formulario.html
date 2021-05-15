@@ -1,0 +1,144 @@
+{% extends 'pages/model.html' %}
+
+{% block principal %}
+        <div class="container">
+        <form id="username_exists_form" method='GET'>
+          <div class="row justify-content-center  text-white" style="background-color: #284662;" >
+            <h4>GERADOR DE CENÁRIOS DE CHUVA</h4>
+          </div>
+        <div class="row justify-content-center ">
+            <h5>Informações Básicas do Cenário</h5>
+          
+        </div>
+        <div class="row">
+          <div class="col">
+            <div class="form-group">
+              <label for="exampleFormControlInput1">Nome do cenário</label>
+              <input class="form-control form-control-sm" type="text" name="username" placeholder="Nome do cenário">
+            </div>
+          </div>
+          <div class="col">
+            <label for="forrmControlInput2 ">Mapa</label>
+            <select class="form-control  form-control-sm" id="mapa">
+              
+              <option>ECENS</option>
+              <option>EC</option>
+              <option>GEFS</option>
+              <option>REMOVIES</option>
+            </select>
+          </div>
+        
+          <div class="col">
+            <div class="form-group">
+              <label for="exampleFormControlInput4">Distribuição Espacial</label>
+              <select class="form-control  form-control-sm" id="distribesp">
+                
+                <option>ZERO</option>
+                <option>SECO</option>
+                <option>BASE</option>
+                <option>UMIDO</option>
+                <option>SUL ALTO</option>
+              </select>
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-group">
+              <label for="exampleFormControlInput3">DISTR. TEMP.</label>
+              <input class="form-control form-control-sm" type="month" id="distribtemp">
+            </div>
+          </div>
+          </div>
+        <div class="row">
+          
+          <div class="col">
+            <div class="form-group">
+              <label for="exampleFormControlInput5">Descrição Adicional</label>
+              <input class="form-control form-control-sm" type="text" placeholder="Descrição Adicional">
+            </div>
+          </div>
+          <div class="col">
+          </div>
+        </div>
+        <div class="row justify-content-center ">
+          <h5>Definição do Periodo do Cenário</h5>
+        
+      </div>
+      <div class="row">
+        <div class="col">
+          <div class="form-group">
+            <label for="exampleFormControlInput2">Data Referencia</label>
+            <input class="form-control form-control-sm" type="month" value="{ date}">
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <label for="exampleFormControlInput2">Data inicial</label>
+            <input class="form-control form-control-sm" type="date" id="datainicial" value="{ date}">
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <label for="exampleFormControlInput2">Data final</label>
+            <input class="form-control form-control-sm" type="date" id="datafinal" value="{ date}">
+          </div>
+        </div>
+        
+        <div class="col">
+          <div class="form-group">
+            <label for="exampleFormControlInput2">Inicio mapeamento</label>
+            <input class="form-control form-control-sm" type="date" id="mapeamentoinicial" value="{ date}">
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <label for="exampleFormControlInput2">Fim mapeamento</label>
+            <input class="form-control form-control-sm" type="date" id="mapeamentofinal" value="{ date}">
+          </div>
+        </div>
+        
+      </div>
+        <div class = "row justify-content-center" method="get">
+            <button type="submit" class="btn btn-primary " >Gerar cenario</button>
+        </div>
+        
+        
+
+      </div>
+      
+    </form>
+    <div class='container'>
+    <br>
+    
+    <div id='tabela'>
+    
+  </div>
+  </div>
+{% endblock %}
+{% block script%}
+<script >
+    $('#username_exists_form').on('submit',function(e){
+            e.preventDefault();
+            var mapname = $('#mapa').val();
+            var datainicial = $('#datainicial').val();
+            var datafinal = $('#datafinal').val();
+            var mapeamentoinicial = $('#mapeamentoinicial').val();
+            var mapeamentofinal = $('#mapeamentofinal').val();
+            var cenario = $('#distribesp').val();
+            var anodistribtemp = $('#distribtemp').val();
+            
+            
+            console.log("clicou" + $('#mapa').val());
+            $.get('tablesJoin/',
+                {'mapa': mapname,"datainicial":datainicial,"datafinal":datafinal,"mapeamentoinicial":mapeamentoinicial,"mapeamentofinal":mapeamentofinal,"cenario":cenario,"anodistribtemp":anodistribtemp},   
+                function(response){
+                    //console.log(response); //Should I have a json object in 'result' variable?
+                    
+                      $('#tabela').html(response);
+                    
+                  }
+            );
+        }); 
+
+        
+  </script>
+{% endblock %}

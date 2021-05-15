@@ -1,18 +1,11 @@
-{%load static%}
-
-
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pagina Inicial</title>
-
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-
-</head>
-<body>
-    <h3>Bem vindos ao sistema</h3> 
-</body>
+{# ecom_app/pages/templates/index.html #}
+{% load render_table from django_tables2 %}
+<!doctype html>
+<html>
+    <head>
+        <title>List of persons</title>
+    </head>
+    <body>
+        {% render_table object_list %}
+    </body>
 </html>

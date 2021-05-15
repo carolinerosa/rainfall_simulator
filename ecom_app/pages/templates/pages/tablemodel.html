@@ -1,0 +1,104 @@
+<!--<table class="table table-bordered">-->
+  <div class="row justify-content-center  text-white" style="background-color: midnightblue;" >
+    <h4>Chuva Observada Últimos 15 Dias - Acompanhamento</h4>
+  </div>
+  <br>
+  <table  class="table table-bordered">
+      
+    <thead>
+    <tr>
+    
+      {% for i in psat_columns %}
+        {% if i  != "bacia"%}
+              <th scope="col" >{{i | date:"d-M"}}</th>
+        {% else %}
+              <th scope="col" >{{i | title }}</th>
+          
+        {% endif %}
+      {% endfor %}
+    
+    </tr>
+  </thead>
+    {% for tab in psat %}
+    <tr>
+      {% for key,value in tab.items %}
+        {% if key  != "index" %}
+          {% if key != 'bacia' %}
+            <td>{{ value | stringformat:".2f"}}</td>
+          {% else %}
+            <td>{{ value }}</td>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+    </tr>
+    {% endfor %}
+  </table>
+  <div class="row justify-content-center  text-white" style="background-color: midnightblue;" >
+    <h4>Previsão de Chuva ECOM</h4>
+  </div>
+  <br>
+  <table  class="table table-bordered">
+     
+    <thead>
+    <tr>
+    
+      {% for i in columns %}
+        {% if i  != "bacia"%}
+              <th scope="col" >{{i | date:"d-M"}}</th>
+        {% else %}
+              <th scope="col" >{{i | title }}</th>
+          
+        {% endif %}
+      {% endfor %}
+    
+    </tr>
+  </thead>
+    {% for tab in mapa %}
+    <tr>
+      {% for key,value in tab.items %}
+        {% if key  != "index" %}
+          {% if key != 'bacia' %}
+            <td>{{ value | stringformat:".2f"}}</td>
+          {% else %}
+            <td>{{ value }}</td>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+    </tr>
+    {% endfor %}
+  </table>
+  
+  <div class="row justify-content-center  text-white" style="background-color: midnightblue;" >
+    <h4>Resumo cenário</h4>
+  </div>
+  <br>
+  <table  class="table table-bordered">
+      
+    <thead>
+    <tr>
+    
+      {% for i in resumo_columns %}
+        {% if i  != "bacia"%}
+              <th scope="col" >{{i | date:"d-M" }}</th>
+        {% else %}
+              <th scope="col" >{{i | title }}</th>
+          
+        {% endif %}
+      {% endfor %}
+    
+    </tr>
+  </thead>
+    {% for tab in resumo %}
+    <tr>
+      {% for key,value in tab.items %}
+        {% if key  != "index" %}
+          {% if key != 'bacia' %}
+            <td>{{ value | stringformat:".2f"}}</td>
+          {% else %}
+            <td>{{ value }}</td>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+    </tr>
+    {% endfor %}
+  </table>

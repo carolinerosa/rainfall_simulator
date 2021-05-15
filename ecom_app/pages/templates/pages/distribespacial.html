@@ -1,0 +1,115 @@
+<!--<table class="table table-bordered">-->
+{% extends 'pages/model.html' %}
+{% block principal %}
+<div class="container">
+  <form id="distrib_espacial_form" method='POST'>
+    <div class="row justify-content-center  text-white" style="background-color: #284662;">
+      <h4>DISTRIBUIÇÃO ESPACIAL DAS BACIAS</h4>
+    </div>
+    <div class="row justify-content-center ">
+      <h5>Tabela de distribuição espacial das bacias</h5>
+
+    </div>
+    <div id=tabela>
+      <table id="tabelaEspeacial" class="table table-bordered ">
+        <thead>
+          <tr>
+            {% for i in columns %}
+              <th scope="col" >{{i | title}}</th>
+            {% endfor %}
+            
+            <th scope="col"  contenteditable="true" id="input[type=text]"></th>
+          </tr>
+        </thead>
+
+        {% for tab in distribespacial %}
+        <tr>
+          {% for key,value in tab.items %}
+            {% if key  != "index"%}
+              {% if key != 'bacia' %}
+              <td contenteditable="true"  id="input{{ forloop.counter }}item{{ tab.index }}">{{ value | stringformat:".2f" }}</td>
+              {% else %}
+              <td contenteditable="true"  id="input{{ forloop.counter }}item{{ tab.index }}">{{ value  }}</td>
+              {% endif %}
+              
+            {% endif %}
+            
+          {% endfor %}
+          <!--<td contenteditable="true" type="text"><input type="text" id="id1" maxlength="4" size="4" /></td>-->
+          <td contenteditable="true" id="input_item{{ tab.index }}" ></td>
+        </tr>
+        {% endfor %}
+        
+      </table>
+    </div>
+    <div class = "row justify-content-center" method="post">
+      <button type="submit" class="btn btn-primary " >Salvar</button>
+    </div>
+    <br>
+</div>
+
+{% endblock %}
+
+{% block script%}
+<script >
+function bind() {
+  var inputs = [];
+  inputs = document.querySelectorAll('*[id^="input"]');
+  function paste(e) {
+    // Prevent the real paste to change the input value.
+    e.preventDefault();
+    var pastedText;
+    // Get text from paste event.
+    if(window.clipboardData && window.clipboardData.getData ) {
+      pastedText = window.clipboardData.getData('Text');
+    }  else if( e.clipboardData && e.clipboardData.getData ){
+      pastedText = e.clipboardData.getData('text/plain');
+    }
+    startwith = this.getAttribute('id').split('item')[0]
+    column = document.querySelectorAll('*[id^='+startwith+']');
+    console.log(column)
+    // Start to fill text from left to right.
+    var i, len, str, startPlace = false;
+      for(i = 0 ; i < column.length > 0 ; ++i) {
+        // SKip input before selected one.
+            console.log("comecou+" +i)
+            startPlace = true;
+            str = pastedText.split('\n')[i];
+            console.log(str)
+            name = startwith +"item"+ i;
+            
+            console.log(name)
+            document.getElementById(name).innerHTML= str;
+          
+          
+       
+      }
+    return false;
+    }
+    
+  // Add EventListener, paste event will be a input param.
+  var i, len;
+  
+  for (i = 0, len = inputs.length; i < len; ++i) {
+    inputs[i].addEventListener("paste", paste);
+  }
+}
+// Bind
+bind();
+window.CSRF_TOKEN=''
+$('#distrib_espacial_form').on('submit',function(e){
+            e.preventDefault();
+            var tableName = $('#tabela')
+            console.log("clicou" + $('#tabela').html())
+            $.post('sendTable/',
+                {'table':tableName.html()},   
+                function(response){
+                    console.log(response); //Should I have a json object in 'result' variable?
+                  }
+            );
+        }); 
+
+        
+
+  </script>
+{% endblock %}
